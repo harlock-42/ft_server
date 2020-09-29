@@ -8,6 +8,7 @@ WORKDIR /tmp
 
 COPY ./srcs/nginx/index.html ./
 COPY ./srcs/nginx/default ./
+COPY ./srcs/nginx/www.website.com.conf ./
 COPY ./srcs/wordpress/latest.tar.gz ./
 COPY ./srcs/init.sh ./
 
