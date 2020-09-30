@@ -56,7 +56,9 @@ chown -R www-data /var/log/nginx/website/
 
 ls -s /etc/nginx/sites-available/www.website.com.conf /etc/nginx/sites-enabled/www.website.com.conf
 
+# SSL
 
+mkdir /etc/nginx/ssl
+openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/mysite.com.pem -keyout /etc/nginx/ssl/monsupersite.key -subj "/C=FR/ST=Paris/0=42 School/OU=tallaire/CN=mysite.com"
 
-
-nginx
+#service nginx start
