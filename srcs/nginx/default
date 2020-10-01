@@ -1,12 +1,12 @@
 server {
-	server_name www.website.com;
+	server_name localhost;
 	listen 80;
 	port_in_redirect off;
 	access_log /var/log/nginx/website/access.log;
 	error_log /var/log/nginx/website/error.log error;
 
-	root /var/www/website/;
-	index index.php;
+	root /usr/share/nginx/html/;
+	index index.html index.htm;
 
 	location ~ \.php$ {
 	try_files $uri =404;
@@ -15,4 +15,16 @@ server {
 	fastcgi_split_path_info ^(.+\.php)(.*)$;
 	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 	}
+#server {
+#	listen 443
+#	server_name localhost;
+#	ssl on;
+#	ssl_certificate /etc/nginx/ssl/localhost.pem;
+#	ssl_certificate_key /etc/nginx/ssl/localhost.key;
+#	location / {
+#		root	/usr/share/nginx/html/;
+#		index index.html index.htm;
+#	}
+
+
 }
