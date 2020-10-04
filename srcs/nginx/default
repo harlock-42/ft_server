@@ -1,30 +1,26 @@
-server {
-	server_name localhost;
+server	{
 	listen 80;
-	port_in_redirect off;
-	access_log /var/log/nginx/website/access.log;
-	error_log /var/log/nginx/website/error.log error;
+	listen [::]:80;
 
-	root /usr/share/nginx/html/;
+	server_name localhost;
+	
+	return 301 https://$host$request_uri;
+}
+
+server	{
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	server_name localhost;
+
+	ssl on;
+	ssl_certificate /etc/nginx/ssl/localhost.pem;
+	ssl_certificate_key /etc/nginx/ssl/localhost.key;
+
+	root /usr/share/nginx/html;
+	autoindex on;
 	index index.html index.htm;
 
-	location ~ \.php$ {
-	try_files $uri =404;
-	include fastcgi_params;
-	fastcgi_pass unix:/run/php/php7.3-fpm.sock;
-	fastcgi_split_path_info ^(.+\.php)(.*)$;
-	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+	location / {
+		try_files $uri $uri/ =404;
 	}
-#server {
-#	listen 443
-#	server_name localhost;
-#	ssl on;
-#	ssl_certificate /etc/nginx/ssl/localhost.pem;
-#	ssl_certificate_key /etc/nginx/ssl/localhost.key;
-#	location / {
-#		root	/usr/share/nginx/html/;
-#		index index.html index.htm;
-#	}
-
-
 }
