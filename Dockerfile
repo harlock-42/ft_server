@@ -32,7 +32,8 @@ RUN rm /etc/nginx/sites-available/default \
 
 WORKDIR ./tmp
 
-RUN ./init.sh
+RUN mkdir /var/log/nginx/website \
+&& chown -R www-data /var/log/nginx/website/
 
 RUN mkdir /etc/nginx/ssl \
 && openssl req -newkey rsa:4096 \
@@ -46,4 +47,4 @@ RUN mkdir /etc/nginx/ssl \
 
 WORKDIR ..
 
-CMD ["bash"]
+CMD bash /tmp/init.sh
