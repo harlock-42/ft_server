@@ -20,8 +20,11 @@
 
 #echo "<?php phpinfo(); ?>" >> /var/www/html/mysite.com/index.php
 
-#service mysql start
+service mysql start
 
+while pgrep mysql > /dev/null
+do sleep 1;
+done
 #echo "CREATE DATABASE harlock ;" | mysql -u root
 #echo "GRANT ALL PRIVILEGES ON harlock.* TO 'root'@'localhost' WITH GRANT OPTION ;" | mysql -u root
 #echo "UPDATE mysql.user SET  Password=PASSWORD ('user42') WHERE User=root ;" | mysql -u root

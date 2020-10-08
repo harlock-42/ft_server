@@ -53,6 +53,10 @@ WORKDIR ..
 # Mariadb
 
 RUN service mysql start \
-#&& echo "CREATE USER" 'harlock'@'localhost' IDENTIFIED BY 'user42' ; | mysql -u root \
-&& echo "CREATE DATABASE harlock ; " | mysql -u root
+&& echo "CREATE USER 'harlock'@'localhost' IDENTIFIED BY 'user42' ;" | mysql -u root \
+&& echo "CREATE DATABASE data ; " | mysql -u root \
+&& echo "GRANT ALL PRIVILEGES ON data.* TO 'harlock'@'localhost' WITH GRANT OPTION ;" | mysql -u root \
+&& echo "UPDATE mysql.user SET Password=PASSWORD ('user42') WHERE User='harlock' ;" | mysql -u root \
+&& echo "FLUSH PRIVILEGES ;" | mysql -u root
 
+ENTRYPOINT bash /tmp/init.sh
