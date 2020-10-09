@@ -20,9 +20,11 @@
 
 #echo "<?php phpinfo(); ?>" >> /var/www/html/mysite.com/index.php
 
+service nginx start
 service mysql start
+service php7.3-fpm start
 
-while pgrep mysql > /dev/null
+while pgrep nginx > /dev/null
 do sleep 1;
 done
 #echo "CREATE DATABASE harlock ;" | mysql -u root
