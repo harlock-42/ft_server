@@ -7,6 +7,7 @@ COPY ./srcs/nginx/default ./
 COPY ./srcs/wordpress/latest.tar.gz ./
 COPY ./srcs/php/config.inc.php ./
 COPY ./srcs/init.sh ./
+COPY ./srcs/wordpress/ ./
 
 WORKDIR ..
 
@@ -65,10 +66,14 @@ RUN service mysql start \
 
 WORKDIR ./tmp
 
+# Wordpress
+
+RUN mv wordpress /usr/share/nginx/html/
+
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz \
 && tar xvf phpMyAdmin-5.0.2-all-languages.tar.gz \
 && mv ./config.inc.php ./phpMyAdmin-5.0.2-all-languages/ \
-&& mv ./phpMyAdmin-5.0.2-all-languages /usr/share/nginx/html/phpmyadmin
+&& mv ./phpMyAdmin-5.0.2-all-languages /usr/share/nginx/html/wordpress/phpmyadmin
 
 WORKDIR ..
 

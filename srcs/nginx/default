@@ -16,7 +16,7 @@ server	{
 	ssl_certificate /etc/nginx/ssl/localhost.pem;
 	ssl_certificate_key /etc/nginx/ssl/localhost.key;
 
-	root /usr/share/nginx/html;
+	root /usr/share/nginx/html/wordpress/;
 	autoindex on;
 	index index.html index.htm index.php;
 
