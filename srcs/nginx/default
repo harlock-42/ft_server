@@ -2,22 +2,21 @@ server	{
 	listen 80;
 	listen [::]:80;
 
-	server_name localhost;
-	
+	server_name website;
 	return 301 https://$host$request_uri;
 }
 
 server	{
 	listen 443 ssl;
 	listen [::]:443 ssl;
-	server_name localhost;
+
+	server_name website;
 
 	ssl on;
 	ssl_certificate /etc/nginx/ssl/localhost.pem;
 	ssl_certificate_key /etc/nginx/ssl/localhost.key;
 
-	root /usr/share/nginx/html/wordpress/;
-	autoindex on;
+	root /var/www/website;
 	index index.html index.htm index.php;
 
 	location / {
