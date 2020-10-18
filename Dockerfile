@@ -1,16 +1,5 @@
 FROM debian:buster
 
-WORKDIR /tmp
-
-COPY ./srcs/nginx/index.html ./
-COPY ./srcs/nginx/default ./
-COPY ./srcs/wordpress/latest.tar.gz ./
-COPY ./srcs/php/config.inc.php ./
-COPY ./srcs/init.sh ./
-COPY ./srcs/wordpress/ ./
-
-WORKDIR ..
-
 RUN apt-get update \
 && apt-get install -y vim \
 && apt-get install -y nginx \
@@ -35,13 +24,34 @@ RUN chown -R www-data /var/www/* \
 && touch /var/www/website/index.php \
 && echo "<?php phpinfo(); ?>" >> /var/www/website/index.php
 
+WORKDIR /tmp
+
+COPY ./srcs/nginx/index.html ./
+COPY ./srcs/nginx/indexon ./
+COPY ./srcs/nginx/indexoff ./
+COPY ./srcs/wordpress/latest.tar.gz ./
+COPY ./srcs/php/config.inc.php ./
+COPY ./srcs/init.sh ./
+COPY ./srcs/wordpress/ ./
+
+WORKDIR ..
 
 RUN rm /etc/nginx/sites-available/default \
 && rm /etc/nginx/sites-enabled/default \
 && rm /usr/share/nginx/html/index.html \
-&& cp /tmp/default /etc/nginx/sites-available/ \
-&& cp /tmp/index.html /var/www/website/ \
-&& ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+&& cp /tmp/index.html /var/www/website
+
+ARG index=on
+
+RUN if [ "$index" = "off" ]; \
+then \
+cp /tmp/indexoff /etc/nginx/sites-available/ \
+&& ln -s /etc/nginx/sites-available/indexoff /etc/nginx/sites-enabled/; \
+else \
+cp /tmp/indexon /etc/nginx/sites-available/ \
+&& ln -s /etc/nginx/sites-available/indexon /etc/nginx/sites-enabled/; \
+fi
+
 
 WORKDIR ./tmp
 
@@ -80,9 +90,10 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-lang
 && tar xvf phpMyAdmin-5.0.2-all-languages.tar.gz \
 && mv ./config.inc.php ./phpMyAdmin-5.0.2-all-languages/ \
 && mv ./phpMyAdmin-5.0.2-all-languages /var/www/website/phpmyadmin \
-&& mkdir -p /var/www/website/phpmyadmin/tmp \
-&& chmod -R 775 /var/www/website/phpmyadmin/
+&& chmod -R 777 /tmp/
 
 WORKDIR ..
 
 ENTRYPOINT bash /tmp/init.sh
+
+Run echo "\n\nTo desactivate autoindex, when you build your contener, please use the folowing command :\n\ndocker build -t NAME --build-arg index=off . \n\n"
